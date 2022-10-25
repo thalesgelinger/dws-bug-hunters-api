@@ -1,4 +1,4 @@
-import "./firebase";
+import "../firebase";
 
 function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />;
