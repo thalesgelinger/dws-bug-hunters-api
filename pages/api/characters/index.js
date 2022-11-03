@@ -1,5 +1,12 @@
 import { db } from "../../../firebase";
-import { collection, getDocs, addDoc, setDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  setDoc,
+  getDoc,
+  doc,
+} from "firebase/firestore";
 
 export default async function handler(req, res) {
   try {
@@ -91,7 +98,6 @@ const post = async (req, res) => {
 };
 
 const patch = async (req, res) => {
-  const oldCharacter = doc(db, "characters", req.body.id);
   const factionsRefArr = [];
   const equipmentRefArr = [];
 
@@ -105,15 +111,33 @@ const patch = async (req, res) => {
     equipmentRefArr.push(equipDoc);
   });
 
-  const updatedCharacter = {
-    ...req.body,
-    equipment: [...equipmentRefArr],
-    factions: [...factionsRefArr],
+  const oldCharDoc = doc(db, "characters", req.body.id);
+  const oldChar = (await getDoc(oldCharDoc)).data();
+
+  const oldCharEquipment = [];
+  const oldCharFactions = [];
+
+  oldChar.equipment?.forEach((equip) => {
+    const equipDoc = doc(db, "equipment", equip.id);
+    oldCharEquipment.push(equipDoc);
+  });
+
+  oldChar.factions?.forEach((faction) => {
+    const factionDoc = doc(db, "factions", faction.id);
+    oldCharFactions.push(factionDoc);
+  });
+
+  const updatedChar = {
+    ...oldChar,
+    equipment:
+      req.body.equipment?.length >= 0 ? [...equipmentRefArr] : oldCharEquipment,
+    factions:
+      req.body.factions?.length >= 0 ? [...factionsRefArr] : oldCharFactions,
   };
 
-  await setDoc(oldCharacter, updatedCharacter);
+  await setDoc(oldChar, updatedChar);
 
   res
     .status(200)
-    .json({ message: "Character updated", character: { ...updatedCharacter } });
+    .json({ message: "Character updated", character: { ...updatedChar } });
 };
