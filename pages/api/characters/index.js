@@ -58,12 +58,12 @@ const post = async (req, res) => {
   const factionsRefArr = [];
   const equipmentRefArr = [];
 
-  req.body.factions.forEach((faction) => {
+  req.body.factions?.forEach((faction) => {
     const factionDoc = doc(db, "factions", faction.id);
     factionsRefArr.push(factionDoc);
   });
 
-  req.body.equipment.forEach((equip) => {
+  req.body.equipment?.forEach((equip) => {
     const equipDoc = doc(db, "equipment", equip.id);
     equipmentRefArr.push(equipDoc);
   });
@@ -87,12 +87,12 @@ const patch = async (req, res) => {
   const factionsRefArr = [];
   const equipmentRefArr = [];
 
-  req.body.factions.forEach((faction) => {
+  req.body.factions?.forEach((faction) => {
     const factionDoc = doc(db, "factions", faction.id);
     factionsRefArr.push(factionDoc);
   });
 
-  req.body.equipment.forEach((equip) => {
+  req.body.equipment?.forEach((equip) => {
     const equipDoc = doc(db, "equipment", equip.id);
     equipmentRefArr.push(equipDoc);
   });
