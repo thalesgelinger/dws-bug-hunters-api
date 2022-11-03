@@ -1,5 +1,5 @@
 import { db } from "../../../firebase";
-import { collection, getDocs, addDoc, doc } from "firebase/firestore";
+import { collection, getDocs, addDoc, setDoc, doc } from "firebase/firestore";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   }
 }
 
-const get = async (req, res) => {
+const get = async (_, res) => {
   const charactersSnapshot = await getDocs(collection(db, "characters"));
   const equipmentSnapshot = await getDocs(collection(db, "equipment"));
   const factionsSnapshot = await getDocs(collection(db, "factions"));
@@ -85,6 +85,7 @@ const post = async (req, res) => {
 };
 
 const patch = async (req, res) => {
+  const oldCharacter = doc(db, "characters", req.body.id);
   const factionsRefArr = [];
   const equipmentRefArr = [];
 
@@ -98,16 +99,15 @@ const patch = async (req, res) => {
     equipmentRefArr.push(equipDoc);
   });
 
-  const newCharacter = {
+  const updatedCharacter = {
     ...req.body,
     factions: [...factionsRefArr],
     equipment: [...equipmentRefArr],
   };
 
-  // qual a chamada certa pra fazer aqui?
-  // await db.collection("characters").doc(req.body.id).update(newCharacter);
+  await setDoc(oldCharacter, updatedCharacter);
 
   res
     .status(200)
-    .json({ message: "Character updated", character: { ...newCharacter } });
+    .json({ message: "Character updated", character: { ...updatedCharacter } });
 };
