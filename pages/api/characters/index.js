@@ -1,8 +1,6 @@
 import { db } from "../../../firebase";
 import { collection, getDocs, addDoc, setDoc, doc } from "firebase/firestore";
 
-import { v4 as uuidv4 } from "uuid";
-
 export default async function handler(req, res) {
   try {
     const methods = {
@@ -76,11 +74,11 @@ const post = async (req, res) => {
     equipment: [...equipmentRefArr],
   };
 
-  await addDoc(collection(db, "characters"), { ...newCharacter, id: uuidv4() });
+  await addDoc(collection(db, "characters"), newCharacter);
 
   res.status(200).json({
     message: "Character created",
-    character: { ...newCharacter },
+    character: newCharacter,
   });
 };
 
