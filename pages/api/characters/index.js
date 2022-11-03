@@ -35,6 +35,10 @@ const get = async (_, res) => {
   charactersSnapshot.forEach((doc) => {
     const data = doc.data();
 
+    if (!!data.id) {
+      delete data.id;
+    }
+
     const charactersEquip = data?.equipment?.map((equip) =>
       equipment.find((x) => x.id === equip._key.path.segments[6])
     );
@@ -44,6 +48,7 @@ const get = async (_, res) => {
     );
 
     characters.push({
+      id: doc.id,
       ...data,
       equipment: [...charactersEquip],
       factions: [...charactersFactions],
@@ -56,6 +61,10 @@ const get = async (_, res) => {
 const post = async (req, res) => {
   const factionsRefArr = [];
   const equipmentRefArr = [];
+
+  if (!!req.body?.id) {
+    delete req.body.id;
+  }
 
   req.body.factions?.forEach((faction) => {
     const factionDoc = doc(db, "factions", faction.id);
