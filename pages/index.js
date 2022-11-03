@@ -16,8 +16,8 @@ export default function Home() {
           <span>GET /api/tasks</span>
         </li>
         <li>
-          <h4>Equipments</h4>
-          <span>GET /api/equipments</span>
+          <h4>Equipment</h4>
+          <span>GET /api/equipment</span>
         </li>
         <li>
           <h4>Factions</h4>
