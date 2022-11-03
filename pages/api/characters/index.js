@@ -135,7 +135,7 @@ const patch = async (req, res) => {
       req.body.factions?.length >= 0 ? [...factionsRefArr] : oldCharFactions,
   };
 
-  await setDoc(oldChar, updatedChar);
+  await setDoc(oldCharDoc, updatedChar);
 
   res
     .status(200)
