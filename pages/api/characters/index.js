@@ -44,10 +44,9 @@ const get = async (_, res) => {
     );
 
     characters.push({
-      id: doc.id,
       ...data,
-      equipment: charactersEquip,
-      factions: charactersFactions,
+      equipment: [...charactersEquip],
+      factions: [...charactersFactions],
     });
   });
 
@@ -70,8 +69,8 @@ const post = async (req, res) => {
 
   const newCharacter = {
     ...req.body,
-    factions: [...factionsRefArr],
     equipment: [...equipmentRefArr],
+    factions: [...factionsRefArr],
   };
 
   await addDoc(collection(db, "characters"), newCharacter);
@@ -99,8 +98,8 @@ const patch = async (req, res) => {
 
   const updatedCharacter = {
     ...req.body,
-    factions: [...factionsRefArr],
     equipment: [...equipmentRefArr],
+    factions: [...factionsRefArr],
   };
 
   await setDoc(oldCharacter, updatedCharacter);
