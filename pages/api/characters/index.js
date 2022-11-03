@@ -129,6 +129,7 @@ const patch = async (req, res) => {
 
   const updatedChar = {
     ...oldChar,
+    ...req.body,
     equipment:
       req.body.equipment?.length >= 0 ? [...equipmentRefArr] : oldCharEquipment,
     factions:
