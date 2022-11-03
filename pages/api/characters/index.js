@@ -73,6 +73,23 @@ const post = async (req, res) => {
     delete req.body.id;
   }
 
+  const factionIsWrong = !Array.isArray(req.body.factions);
+  const equipmentIsWrong = !Array.isArray(req.body.equipment);
+
+  if (factionIsWrong) {
+    res.status(200).json({
+      message: "tem algo errado com factions",
+      character: { ...req.body },
+    });
+  }
+
+  if (equipmentIsWrong) {
+    res.status(200).json({
+      message: "tem algo errado com equipment",
+      character: { ...req.body },
+    });
+  }
+
   req.body.factions?.forEach((faction) => {
     const factionDoc = doc(db, "factions", faction.id);
     factionsRefArr.push(factionDoc);
@@ -100,6 +117,23 @@ const post = async (req, res) => {
 const patch = async (req, res) => {
   const factionsRefArr = [];
   const equipmentRefArr = [];
+
+  const factionIsWrong = !Array.isArray(req.body.factions);
+  const equipmentIsWrong = !Array.isArray(req.body.equipment);
+
+  if (factionIsWrong) {
+    res.status(200).json({
+      message: "tem algo errado com factions",
+      character: { ...req.body },
+    });
+  }
+
+  if (equipmentIsWrong) {
+    res.status(200).json({
+      message: "tem algo errado com equipment",
+      character: { ...req.body },
+    });
+  }
 
   req.body.factions?.forEach((faction) => {
     const factionDoc = doc(db, "factions", faction.id);
