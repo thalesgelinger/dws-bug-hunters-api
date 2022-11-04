@@ -46,13 +46,15 @@ const get = async (_, res) => {
       delete data.id;
     }
 
-    const charactersEquip = data?.equipment?.map((equip) =>
-      equipment.find((x) => x.id === equip._key.path.segments[6])
-    );
+    const charactersEquip =
+      data?.equipment?.map((equip) =>
+        equipment.find((x) => x.id === equip._key.path.segments[6])
+      ) || [];
 
-    const charactersFactions = data?.factions?.map((faction) =>
-      factions.find((x) => x.id === faction._key.path.segments[6])
-    );
+    const charactersFactions =
+      data?.factions?.map((faction) =>
+        factions.find((x) => x.id === faction._key.path.segments[6])
+      ) || [];
 
     characters.push({
       id: doc.id,
@@ -61,6 +63,8 @@ const get = async (_, res) => {
       factions: [...charactersFactions],
     });
   });
+
+  console.log(characters);
 
   res.status(200).json(characters);
 };
@@ -73,14 +77,18 @@ const post = async (req, res) => {
     delete req.body.id;
   }
 
-  const factionIsWrong = !Array.isArray(req.body.factions);
-  const equipmentIsWrong = !Array.isArray(req.body.equipment);
+  const factionIsWrong =
+    !!req.body?.factions && !Array.isArray(req.body.factions);
+
+  const equipmentIsWrong =
+    !!req.body?.equipment && !Array.isArray(req.body.equipment);
 
   if (factionIsWrong) {
     res.status(200).json({
       message: "tem algo errado com factions",
       character: { ...req.body },
     });
+    return;
   }
 
   if (equipmentIsWrong) {
@@ -88,8 +96,8 @@ const post = async (req, res) => {
       message: "tem algo errado com equipment",
       character: { ...req.body },
     });
+    return;
   }
-
   req.body.factions?.forEach((faction) => {
     const factionDoc = doc(db, "factions", faction.id);
     factionsRefArr.push(factionDoc);
@@ -118,14 +126,18 @@ const patch = async (req, res) => {
   const factionsRefArr = [];
   const equipmentRefArr = [];
 
-  const factionIsWrong = !Array.isArray(req.body.factions);
-  const equipmentIsWrong = !Array.isArray(req.body.equipment);
+  const factionIsWrong =
+    !!req.body?.factions && !Array.isArray(req.body.factions);
+
+  const equipmentIsWrong =
+    !!req.body?.equipment && !Array.isArray(req.body.equipment);
 
   if (factionIsWrong) {
     res.status(200).json({
       message: "tem algo errado com factions",
       character: { ...req.body },
     });
+    return;
   }
 
   if (equipmentIsWrong) {
@@ -133,6 +145,7 @@ const patch = async (req, res) => {
       message: "tem algo errado com equipment",
       character: { ...req.body },
     });
+    return;
   }
 
   req.body.factions?.forEach((faction) => {
