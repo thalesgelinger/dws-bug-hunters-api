@@ -9,7 +9,7 @@ export default async function updateCharacter(req, res) {
 
     return await methods[req.method.toLowerCase()](req, res);
   } catch {
-    res.status(218).json({ message: "Feijoada" });
+    res.status(218).json({ message: "An unexpected error ocurred." });
   }
 }
 
